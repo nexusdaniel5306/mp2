@@ -9,7 +9,7 @@ const statNames: Record<string, string> = {
   'special-attack': 'Special Attack', 'special-defense': 'Special Defense', speed: 'Speed',
 }
 
-export function DetailView({ pokemon }: { pokemon: Pokemon[] }) {
+export function DetailView({ pokemon, shiny }: { pokemon: Pokemon[]; shiny: boolean }) {
   const { id = '' } = useParams()
   const record = /^\d+$/.test(id) ? pokemon.find((item) => item.id === Number(id)) : undefined
   if (!record) return <div className="empty panel"><p className="eyebrow">RECORD NOT FOUND</p>
@@ -18,15 +18,17 @@ export function DetailView({ pokemon }: { pokemon: Pokemon[] }) {
   const neighbors = neighborIds(record.id)
   const previous = pokemon.find((item) => item.id === neighbors.previous)!
   const next = pokemon.find((item) => item.id === neighbors.next)!
+  const maxStat = Math.max(...pokemon.flatMap((item) => item.stats.map((stat) => stat.base_stat)))
   return (
     <>
       <Link className="back-link" to="/">← Back to list</Link>
       <div className="detail-heading"><div><p className="eyebrow">03 / SPECIMEN RECORD</p><h1>{displayName(record.name)}</h1>
         <TypeBadges types={record.types} /></div><span className="detail-number">#{record.id}<small>NATIONAL POKÉDEX</small></span></div>
-      <div className="detail-grid">
-        <section className="specimen-panel panel" aria-label="Specimen sprite">
+      <div className="detail-grid" key={record.id}>
+        <section className={`specimen-panel panel specimen-${record.types[0]}`} aria-label="Specimen sprite">
           <div className="specimen-label"><span>JOHTO / GEN 02</span><span>◒</span></div>
-          <PokemonImage key={record.id} src={record.sprites.front_default} name={record.name} eager />
+          <div className="specimen-art"><span className="specimen-watermark" aria-hidden="true">{record.id}</span>
+            <PokemonImage sprites={record.sprites} name={record.name} shiny={shiny} eager /></div>
           <p>SPECIMEN #{record.id}<small>{displayName(record.name)}</small></p>
         </section>
         <section className="attributes panel"><p className="eyebrow">FIELD NOTES</p><h2>At a glance</h2>
@@ -37,17 +39,22 @@ export function DetailView({ pokemon }: { pokemon: Pokemon[] }) {
             {displayName(ability.name)}{ability.is_hidden && <span className="hidden-label">Hidden</span>}</li>)}</ul>
         </section>
         <section className="stats-panel panel"><p className="eyebrow">BASE STAT PROFILE</p><h2>In numbers</h2>
+          <p className="stat-scale">Shared archive scale · 0–{maxStat}</p>
           <ul className="stats">{record.stats.map((stat) => <li key={stat.name}>
             <span>{statNames[stat.name] ?? displayName(stat.name)}</span><strong>{stat.base_stat}</strong>
+            <meter min={0} max={maxStat} value={stat.base_stat}
+              aria-label={statNames[stat.name] ?? displayName(stat.name)}>{stat.base_stat} of {maxStat}</meter>
           </li>)}</ul>
         </section>
       </div>
       <div className="neighbor-caption">Browse by National Pokédex number</div>
       <nav className="neighbor-nav" aria-label="Browse Pokémon">
-        <Link className="neighbor panel" to={`/pokemon/${previous.id}`}><span>← PREVIOUS</span>
-          <strong>{displayName(previous.name)} <small>#{previous.id}</small></strong></Link>
-        <Link className="neighbor panel next" to={`/pokemon/${next.id}`}><span>NEXT →</span>
-          <strong>{displayName(next.name)} <small>#{next.id}</small></strong></Link>
+        <Link className="neighbor panel" to={`/pokemon/${previous.id}`}>
+          <PokemonImage sprites={previous.sprites} name={previous.name} shiny={shiny} />
+          <div><span>← PREVIOUS</span><strong>{displayName(previous.name)} <small>#{previous.id}</small></strong></div></Link>
+        <Link className="neighbor panel next" to={`/pokemon/${next.id}`}>
+          <PokemonImage sprites={next.sprites} name={next.name} shiny={shiny} />
+          <div><span>NEXT →</span><strong>{displayName(next.name)} <small>#{next.id}</small></strong></div></Link>
       </nav>
     </>
   )

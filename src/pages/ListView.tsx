@@ -1,11 +1,13 @@
 import { Link } from 'react-router'
 import { TypeBadges } from '../components/TypeBadges'
 import { PokemonImage } from '../components/PokemonImage'
+import { ArchiveMasthead } from '../components/ArchiveMasthead'
 import { displayName, selectPokemon } from '../utils/pokemon'
 import type { Pokemon, SortDirection, SortKey } from '../types/pokemon'
 
 interface ListViewProps {
   pokemon: Pokemon[]
+  shiny: boolean
   query: string
   sortKey: SortKey
   direction: SortDirection
@@ -14,15 +16,11 @@ interface ListViewProps {
   onDirection: (value: SortDirection) => void
 }
 
-export function ListView({ pokemon, query, sortKey, direction, onQuery, onSortKey, onDirection }: ListViewProps) {
+export function ListView({ pokemon, shiny, query, sortKey, direction, onQuery, onSortKey, onDirection }: ListViewProps) {
   const results = selectPokemon(pokemon, query, sortKey, direction)
   return (
     <>
-      <div className="view-heading">
-        <div><p className="eyebrow">01 / INDEX</p><h1>A region of discovery.</h1>
-          <p className="intro">Search the archive. Get to know the Pokémon of a new generation.</p></div>
-        <span className="archive-stamp"><strong>100</strong>SPECIMEN RECORDS</span>
-      </div>
+      <ArchiveMasthead pokemon={pokemon} shiny={shiny} />
       <div className="controls panel">
         <label className="search-control">Search by name
           <input type="search" placeholder="Try Chikorita…" value={query} onChange={(event) => onQuery(event.target.value)} />
@@ -44,7 +42,7 @@ export function ListView({ pokemon, query, sortKey, direction, onQuery, onSortKe
           <ul className="pokemon-list">{results.map((item) => <li key={item.id}>
             <Link className="pokemon-row" to={`/pokemon/${item.id}`}>
               <span className="record-id">#{item.id}</span>
-              <span className="record-name"><PokemonImage src={item.sprites.front_default} name={item.name} />
+              <span className="record-name"><PokemonImage sprites={item.sprites} name={item.name} shiny={shiny} />
                 <strong>{displayName(item.name)}</strong></span>
               <TypeBadges types={item.types} />
               <span className="experience"><span className="mobile-label">Base exp. </span>{item.base_experience ?? 'Unknown'}</span>

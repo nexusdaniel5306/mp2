@@ -27,6 +27,24 @@ PokéLab was implemented locally on October 4, 2026 for CS 409 MP2. Application 
 
 ## LLM assistance
 
-[llm_logs.csv](llm_logs.csv) contains real shareable links for planning and completed local implementation. The implementation snapshot was refreshed before the authorized v1 push, preserving the planning link. Complete the assignment's LLM experience questions in the submission form.
+[llm_logs.csv](llm_logs.csv) contains real shareable links for planning, the completed v1 implementation, and the October 5 local visual upgrade. The implementation snapshot was refreshed before the authorized v1 push, preserving the planning link. Complete the assignment's LLM experience questions in the submission form.
 
 Temporary browser QA injected explicit Axios failures, a missing/broken sprite, and an unknown experience value to verify recovery. These test-only entry files were removed; the delivered app uses live PokéAPI data without mock fallback.
+
+## October 5 local visual upgrade
+
+Codex assisted with the Johto field-journal masthead, warm paper/grid/contour surfaces, type-colored specimen frames, larger detail composition, six native stat meters, neighbor sprites, and hover/keyboard/reduced-motion styling. The three starter illustrations reuse the loaded PokéAPI sprites. No new dependencies, image sources, web fonts, or generated artwork were introduced.
+
+The meter scale uses the highest base stat in the current 100-record archive (255), shared across every record and stat. Numeric values and accessible names remain available. Reduced-motion declarations were exercised through a temporary external CSS override; the actual `prefers-reduced-motion` media query was restored after verification. No system preference was changed.
+
+## October 5 shiny mode
+
+Codex assisted with one shared, default-off shiny toggle and variant selection in `PokemonImage`. All archive sprites, starter illustrations, detail images, and neighbor images use the existing `front_shiny` field. The toggle keeps its state during route navigation and resets on a full reload. Shiny alt text and null/broken-image placeholders identify the variant clearly. No dependencies, additional data endpoints, inline styles/scripts, or layout tables were added.
+
+Temporary QA consulted the installed Axios declarations (`node_modules/axios/index.d.ts`) for `getAdapter`, wrapped the existing adapter to count requests, and injected a null Chikorita shiny URL and broken Bayleef shiny URL. Fallbacks and restoration to standard sprites passed in the actual app. Data requests stayed at 101 through mode switching, search/sort, navigation, and gallery filtering; image requests are separate. The external QA entry file and injections were removed, and the normal entry was restored before the final build. The built preview uses live, unmodified data.
+
+A new share URL for the shiny-mode assistance could not be recorded because thread sharing was not approved. Existing `llm_logs.csv` links are preserved. Add an approved snapshot covering this feature before submitting the new version.
+
+## October 5 narrow-phone detail correction
+
+Codex assisted with a small external-CSS breakpoint to stack the National ID below long names and constrain the body/detail grid at 320px. No new sources or dependencies were introduced. The existing pending chat-log coverage also applies to this correction.

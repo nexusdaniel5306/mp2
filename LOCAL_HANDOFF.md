@@ -2,6 +2,42 @@
 
 Local implementation and verification completed October 4, 2026. The student subsequently authorized committing and pushing this version as `v1`. Deployment, live verification, demo recording, and submission are tracked separately from these local checks. The earlier `IMPLEMENTATION_PLAN.md` remains the preserved planning record; this file records the actual implementation results.
 
+## October 5 — publication authorization
+
+The student authorized committing and pushing the reviewed field-journal, shiny-mode, and 320px detail fixes to `main`. Final production build/type check, lint, and diff checks pass. The sections below preserve the local-review state at the time their checks were recorded. The existing `v1` tag identifies the original release; this update does not move it. The new Pages workflow and live checks are verified after the push and reported in the chat. Shiny-mode/narrow-phone chat-log coverage remains a submission follow-up because the previous share was not approved.
+
+## October 5 — 320px detail fix
+
+A CSS-only breakpoint at 380px stacks the National ID below the record heading, removes the body's fixed minimum width at narrow sizes, and lets the single detail grid column shrink. At 320px, Misdreavus, Typhlosion, Feraligatr, and Forretress all have document client/scroll widths of 305/305px, with the full ID visible. At 375px the heading stacks; 390px, 768px, and 1440px retain the side-by-side heading. All inspected sizes have zero horizontal overflow. Production build/type check, lint, diff whitespace checks, and browser diagnostics pass. The fix remains local.
+
+## October 5 — shiny mode
+
+One archive-wide **Shiny mode** button now switches List, Gallery, Details, the three starter illustrations, and Previous/Next sprites. It starts off, keeps its selection during navigation, and resets on reload. The button exposes `aria-pressed`, visible On/Off text, and the existing keyboard focus outline. The shared image component selects the already loaded `front_shiny` field and identifies shiny sprites in alternative text. Missing/broken shiny URLs display a labeled placeholder; switching off restores the standard image.
+
+Verification: production build/type check, lint, and `git diff --check` pass. Space and Enter toggle the button. Search `CHI` and Name/Descending remain applied during toggling; Grass selection and its ten records remain applied. Both boundary wraps retain shiny mode, all detail/neighbor image URLs use the selected variant, and the six original stat values remain unchanged. The control and shiny sprites were inspected at desktop, tablet, and phone widths; no horizontal overflow was observed. The final built preview passes default-off, keyboard activation, cross-route persistence, and clean console checks.
+
+A temporary Axios adapter counter recorded 101 data requests for the initial live collection and still 101 after toggling, searching, sorting, navigating, and filtering. Injected null and broken shiny URLs produced accessible placeholders in List, Gallery, Details, and neighbors. Standard images recovered after toggling off. All QA injections and entry files were removed before the final build. No loader/cache, data model, dependency, course-template, or hosting changes were made.
+
+This feature and the field-journal edits remain local and uncommitted. The built review preview stays open at **http://127.0.0.1:4173/mp2/**. Source disclosure is updated. The shiny-mode chat-share URL remains pending because thread sharing was not approved; the existing log links are preserved.
+
+## October 5 — local field-journal upgrade
+
+The visual upgrade is ready for review on top of published v1 (`107cc78`). These edits remain local and uncommitted. No push, deployment, GitHub settings changes, or submission was performed for this upgrade.
+
+- List and Gallery share an asymmetric serif masthead with layered Chikorita, Cyndaquil, and Totodile specimen slips, using the existing loaded records.
+- Warm paper, a faint grid and static contours, and marginal labels establish the field-journal surface. All styling remains in external CSS.
+- Gallery cards use primary-type backgrounds, botanical lines for Grass, ripple rings for Water, and a warm radial glow for Fire. Inset framing, registration marks, faint National IDs, serif names, and small shadows add depth.
+- Details use a large specimen panel beside a narrower information column. Six labeled native stat meters span the full-width section below, with visible numbers and a common 0–255 archive scale.
+- Previous/Next cards include sprites. Card lift, stronger borders, sprite movement, and visible outlines work for keyboard focus; a brief detail entrance animation respects reduced motion.
+
+Verification: production build, TypeScript, lint, and `git diff --check` pass. Rendered List, Gallery, and Details were inspected at 1440×900, 768×1024, and 390×844 with no horizontal overflow. Live/trimmed/case-insensitive search, the no-match reset, all six sorting combinations, every type filter, list and gallery detail entry, ordinary neighbors, and both boundary wraps pass. Keyboard Tab shows a solid focus outline; Enter opens a record. Meters expose all six labels, original values, and their min/max. Browser diagnostics report no warnings/errors.
+
+Reduced-motion verification used a temporary external CSS override to exercise the reduce branch: card/sprite transforms were `none`, transitions were `0s`, and the detail animation was `none`; keyboard focus stayed visible. The real media query was restored. The preview browser does not expose media emulation, so the user's actual OS preference was not toggled.
+
+The built production preview at `http://127.0.0.1:4173/mp2/` also passes fresh detail loading and refresh, both boundary wraps, live search and name sorting, Water filtering, and console checks. The review browser tab remains open.
+
+The loader, Axios requests, cache, routes, controls, data model, dependencies, README, and deployment workflow are unchanged. `SOURCES.md` and `llm_logs.csv` include the visual assistance. The October 4 checks below remain the baseline record; their deployment-pending notes are historical, and the new visual work has not been published.
+
 ## Review the app
 
 The production preview is running and open at **http://127.0.0.1:4173/mp2/**. It uses the built app and live PokéAPI data, with no mock fallback. The preview process must remain running for this URL to work.
@@ -33,7 +69,7 @@ npm run preview -- --host 127.0.0.1
 - Responsive archive styling uses external CSS, semantic lists/definition lists, labeled native controls, pressed filter states, visible keyboard focus, a skip link, and useful sprite alternative text.
 - Vite base is `/mp2/`; BrowserRouter uses `import.meta.env.BASE_URL`. `postbuild` copies the built `dist/index.html` to `dist/404.html` automatically for the existing workflow.
 
-No stretch features, backend, state library, persistent cache, or extra API families were added.
+No backend, state library, persistent cache, or extra API families were added.
 
 ## Verification evidence
 

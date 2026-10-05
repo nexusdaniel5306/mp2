@@ -14,6 +14,7 @@ function App() {
   const [sortKey, setSortKey] = useState<SortKey>('id')
   const [direction, setDirection] = useState<SortDirection>('asc')
   const [selectedType, setSelectedType] = useState('all')
+  const [shiny, setShiny] = useState(false)
   const { pathname } = useLocation()
 
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -29,14 +30,20 @@ function App() {
           <p>Gathering 100 specimen records from PokéAPI.</p></section>}
         {state.status === 'error' && <section className="empty panel" role="alert"><p className="eyebrow">CONNECTION INTERRUPTED</p>
           <h1>The archive is unavailable</h1><p>{state.message}</p><button onClick={retry}>Retry</button></section>}
-        {state.status === 'success' && <Routes>
-          <Route path="/" element={<ListView pokemon={state.pokemon} query={query} sortKey={sortKey} direction={direction}
-            onQuery={setQuery} onSortKey={setSortKey} onDirection={setDirection} />} />
-          <Route path="/gallery" element={<GalleryView pokemon={state.pokemon} selectedType={selectedType} onType={setSelectedType} />} />
-          <Route path="/pokemon/:id" element={<DetailView pokemon={state.pokemon} />} />
-          <Route path="*" element={<div className="empty panel"><h1>Page not found</h1>
-            <p>Head back to the archive to keep exploring.</p><Link className="button" to="/">Back to list</Link></div>} />
-        </Routes>}
+        {state.status === 'success' && <>
+          <div className="sprite-mode panel">
+            <div><p className="eyebrow">SPRITE APPEARANCE</p><p>{shiny ? 'Shiny sprites' : 'Standard sprites'}</p></div>
+            <button aria-pressed={shiny} onClick={() => setShiny((value) => !value)}>Shiny mode <span aria-hidden="true">{shiny ? 'On' : 'Off'}</span></button>
+          </div>
+          <Routes>
+            <Route path="/" element={<ListView pokemon={state.pokemon} query={query} sortKey={sortKey} direction={direction}
+              onQuery={setQuery} onSortKey={setSortKey} onDirection={setDirection} shiny={shiny} />} />
+            <Route path="/gallery" element={<GalleryView pokemon={state.pokemon} selectedType={selectedType} onType={setSelectedType} shiny={shiny} />} />
+            <Route path="/pokemon/:id" element={<DetailView pokemon={state.pokemon} shiny={shiny} />} />
+            <Route path="*" element={<div className="empty panel"><h1>Page not found</h1>
+              <p>Head back to the archive to keep exploring.</p><Link className="button" to="/">Back to list</Link></div>} />
+          </Routes>
+        </>}
       </main>
       <footer className="site-footer"><span>PokéLab <span aria-hidden="true">/</span> Johto Regional Research Archive</span>
         <span>Current Pokémon data & sprites from <a href="https://pokeapi.co/">PokéAPI ↗</a></span></footer>
